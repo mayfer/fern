@@ -10,18 +10,19 @@
             $(function(){
                 var $canvas = Canvas($('#container'));
                 var c = $canvas.get(0).getContext("2d");
+                c.strokeStyle = "#00ff00";
+                c.translate(0, c.height);
+                c.scale(1, -1);
 
-                var max_depth = 2;
+                var max_depth = 3;
                 var drawStem = function(point, angle, length, depth) {
-                    c.strokeStyle = "#00ff00";
                     c.beginPath();
 
                     if(depth === undefined) {
                         depth = 0;
-                    } else {
+                    } else if(depth <= max_depth) {
                         depth += 1;
-                    }
-                    if(depth > max_depth) {
+                    } else {
                         return;
                     }
 
