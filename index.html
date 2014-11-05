@@ -11,15 +11,34 @@
                 var $canvas = Canvas($('#container'));
                 var c = $canvas.get(0).getContext("2d");
 
-                var drawStem = function(from, to) {
+                var drawStem = function(point, angle, length) {
                     c.strokeStyle = "#00ff00";
                     c.beginPath();
+
+                    var from = point;
+                    var to = {
+                        x: from.x + (Math.sin(angle) * length),
+                        y: from.y + (Math.cos(angle) * length),
+                    }
                     c.lineTo(from.x, from.y);
                     c.lineTo(to.x, to.y);
                     c.stroke();
+
+                    var samples = 10;
+                    var interval = {
+                        x: (to.x-from.x)/samples,
+                        y: (to.y-from.y)/samples,
+                    }
+
+                    for(var i = 1; i < samples; i++) {
+                        c.beginPath();
+                        c.lineTo(from.x + i*interval.x, from.y + i*interval.y);
+                        c.lineTo(0, 0);
+                        c.stroke();
+                    }
                 }
 
-                drawStem( {x: c.width/2, y: 50}, {x: c.width/2, y: c.height-50});
+                drawStem( { x: c.width/2, y: 50 }, 0, c.height-100);
 
             });
         </script>
