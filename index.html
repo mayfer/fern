@@ -46,7 +46,6 @@
                     for(var j = 0; j < stem_angles.length; j++) {
                         var stem_angle = stem_angles[j];
                         for(var i = 1; i < samples; i++) {
-                            c.beginPath();
 
                             var stem_length = (samples - i) * length / 30;
                             var stem_from = {
@@ -54,7 +53,6 @@
                                 y: from.y + i*interval.y,
                             }
                             drawStem(stem_from, stem_angle, stem_length, depth);
-                            c.stroke();
                         }
                     }
                 }
