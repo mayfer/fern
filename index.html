@@ -30,15 +30,31 @@
                         y: (to.y-from.y)/samples,
                     }
 
-                    for(var i = 1; i < samples; i++) {
-                        c.beginPath();
-                        c.lineTo(from.x + i*interval.x, from.y + i*interval.y);
-                        c.lineTo(0, 0);
-                        c.stroke();
+                    var diff_angle = 3 * Math.PI/4;
+                    var stem_angles = [angle + diff_angle, -angle - diff_angle];
+                    for(var j = 0; j < stem_angles.length; j++) {
+                        var stem_angle = stem_angles[j];
+                        for(var i = 1; i < samples; i++) {
+                            c.beginPath();
+
+                            var stem_length = i * length / 30;
+                            var stem_from = {
+                                x: from.x + i*interval.x,
+                                y: from.y + i*interval.y,
+                            }
+                            var stem_to = {
+                                x: stem_from.x + (Math.sin(stem_angle) * stem_length),
+                                y: stem_from.y + (Math.cos(stem_angle) * stem_length),
+                            }
+
+                            c.lineTo(stem_from.x, stem_from.y);
+                            c.lineTo(stem_to.x, stem_to.y);
+                            c.stroke();
+                        }
                     }
                 }
 
-                drawStem( { x: c.width/2, y: 50 }, 0, c.height-100);
+                drawStem( { x: c.width/2, y: 50 }, 0, c.height - 100);
 
             });
         </script>
