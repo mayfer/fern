@@ -11,9 +11,19 @@
                 var $canvas = Canvas($('#container'));
                 var c = $canvas.get(0).getContext("2d");
 
-                var drawStem = function(point, angle, length) {
+                var max_depth = 2;
+                var drawStem = function(point, angle, length, depth) {
                     c.strokeStyle = "#00ff00";
                     c.beginPath();
+
+                    if(depth === undefined) {
+                        depth = 0;
+                    } else {
+                        depth += 1;
+                    }
+                    if(depth > max_depth) {
+                        return;
+                    }
 
                     var from = point;
                     var to = {
@@ -30,25 +40,19 @@
                         y: (to.y-from.y)/samples,
                     }
 
-                    var diff_angle = 3 * Math.PI/4;
-                    var stem_angles = [angle + diff_angle, -angle - diff_angle];
+                    var diff_angle = Math.PI/4;
+                    var stem_angles = [angle + diff_angle, angle - diff_angle];
                     for(var j = 0; j < stem_angles.length; j++) {
                         var stem_angle = stem_angles[j];
                         for(var i = 1; i < samples; i++) {
                             c.beginPath();
 
-                            var stem_length = i * length / 30;
+                            var stem_length = (samples - i) * length / 30;
                             var stem_from = {
                                 x: from.x + i*interval.x,
                                 y: from.y + i*interval.y,
                             }
-                            var stem_to = {
-                                x: stem_from.x + (Math.sin(stem_angle) * stem_length),
-                                y: stem_from.y + (Math.cos(stem_angle) * stem_length),
-                            }
-
-                            c.lineTo(stem_from.x, stem_from.y);
-                            c.lineTo(stem_to.x, stem_to.y);
+                            drawStem(stem_from, stem_angle, stem_length, depth);
                             c.stroke();
                         }
                     }
